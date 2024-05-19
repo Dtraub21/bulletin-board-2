@@ -1,4 +1,6 @@
 class BoardsController < ApplicationController
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
+
   def index
     matching_boards = Board.all
 
@@ -26,6 +28,7 @@ class BoardsController < ApplicationController
   def create
     the_board = Board.new
     the_board.name = params.fetch("query_name")
+    the_board.user_id = current_user.id
 
     if the_board.valid?
       the_board.save
